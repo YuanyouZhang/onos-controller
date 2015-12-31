@@ -1,0 +1,12 @@
+name: onos-controller
+summary: onos
+maintainer: onos 
+description: |
+  <onos>
+tags:
+  - openstack
+provides:
+  controller-api:
+    interface: onos-controller-api
+  ovsdb-manager:
+    interface: ovsdb-manager
