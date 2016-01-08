@@ -3,9 +3,9 @@ set -eux
 DIR="$(dirname `readlink -f $0`)"
 TARGET="/opt"
 onos_home="/opt/onos"
-onos=http://205.177.226.235:9999/onosfw/onos-1.3.0.tar.gz
-jdk=http://205.177.226.235:9999/onosfw/jdk-8u51-linux-x64.tar.gz
-repo=http://205.177.226.235:9999/onosfw/repository.tar
+onos=http://205.177.226.237:9999/onosfw/onos-1.3.0.tar.gz
+jdk=http://205.177.226.237:9999/onosfw/jdk-8u51-linux-x64.tar.gz
+repo=http://205.177.226.237:9999/onosfw/repository.tar
 karaf_dist="apache-karaf-3.0.3"
 onos_pkg_name="onos-1.3.0.tar.gz"
 jdk8_pkg_name="jdk-8u51-linux-x64.tar.gz"
