@@ -37,6 +37,7 @@ echo 'export ONOS_OPTS=debug' > /opt/onos/options;
 echo 'export ONOS_USER=root' >> /opt/onos/options;
 mkdir /opt/onos/var;
 mkdir /opt/onos/config;
+sed -i "/^featuresBoot=/c\featuresBoot=$onos_boot_features" /opt/onos/apache-karaf-3.0.3/etc/org.apache.karaf.features.cfg
 
 #jdk config
 
@@ -68,7 +69,9 @@ chmod +x /etc/profile.d/jdk*
 
 service onos start 
 sleep 100
-#service onos restart
-#sleep 60
+service onos restart
+sleep 60
+service onos restart
+sleep 60
 service onos stop
 
