@@ -21,11 +21,15 @@ from charmhelpers.core.host import (
 from subprocess import check_call
 
 hooks = Hooks()
-config = config()
+#config = config()
 
 @hooks.hook("config-changed")
 def config_changed():
-    pass 
+    gatewaymac=config("gateway-mac")
+    print 'gatewaymac value is ' + gatewaymac
+    if gatewaymac != "default" :
+        print 'gatewaymac actually value is ' + gatewaymac
+        check_call("/opt/onos/bin/onos \'externalgateway-update -m " + gatewaymac + "\'",shell=True) 
 
 @hooks.hook("controller-api-relation-joined")
 def controller_api_joined():
