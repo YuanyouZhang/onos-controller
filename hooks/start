@@ -45,7 +45,7 @@ def start():
         check_call("sleep 60", shell=True)
         check_call(["/opt/onos/bin/onos", "-r", "61",
                 "feature:install", "onos-app-vtn-onosfw", "onos-openflow-base","onos-openflow"])
-        check_call("/opt/onos/bin/onos \"externalportname-set -n onos_port2\"", shell=True)
+        check_call("/opt/onos/bin/onos \"externalportname-set -n eth1\"", shell=True)
 
 @hooks.hook("ovsdb-manager-relation-joined")
 def ovsdb_manager_joined():
