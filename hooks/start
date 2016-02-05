@@ -26,34 +26,6 @@ config = config()
 @hooks.hook("config-changed")
 def config_changed():
     pass
-#!/usr/bin/env python
-
-import os
-import sys
-import shutil
-
-
-from charmhelpers.core.hookenv import (
-    Hooks,
-    UnregisteredHookError,
-    config,
-    log,
-    relation_set
-)
-
-from charmhelpers.core.host import (
-    service_start,
-    service_stop
-)
-
-from subprocess import check_call
-
-hooks = Hooks()
-config = config()
-
-@hooks.hook("config-changed")
-def config_changed():
-    pass
 
 @hooks.hook("controller-api-relation-joined")
 def controller_api_joined():
@@ -73,7 +45,9 @@ def start():
         check_call("sleep 60", shell=True)
         check_call(["/opt/onos/bin/onos", "-r", "61",
                 "feature:install", "onos-app-vtn-onosfw", "onos-openflow-base","onos-openflow"])
-        check_call("/opt/onos/bin/onos \"externalportname-set -n eth1\"", shell=True)
+        extport = config("ext-port")
+        print 'external port is ' + extport
+        check_call("/opt/onos/bin/onos \"externalportname-set -n "+extport+"\"", shell=True)
 
 @hooks.hook("ovsdb-manager-relation-joined")
 def ovsdb_manager_joined():

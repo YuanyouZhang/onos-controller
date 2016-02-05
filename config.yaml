@@ -11,6 +11,14 @@ options:
  #   type: int
  #   default: 9001
  #   description: "A short description of the configuration option"
+   ext-port:
+    type: string
+    default:"eth2.724"
+    description: |
+      Space-delimited list of external ports to use for routing of instance
+      traffic to the external public network. Valid values are either MAC
+      addresses (in which case only MAC addresses for interfaces without an IP
+      address already assigned will be used), or interfaces (eth0) 
   gateway-mac:
     type: string
     default: "default"
