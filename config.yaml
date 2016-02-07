@@ -13,7 +13,7 @@ options:
  #   description: "A short description of the configuration option"
    ext-port:
     type: string
-    default:"eth2.724"
+    default: "eth2.724"
     description: |
       Space-delimited list of external ports to use for routing of instance
       traffic to the external public network. Valid values are either MAC
