@@ -11,7 +11,7 @@ options:
  #   type: int
  #   default: 9001
  #   description: "A short description of the configuration option"
-   ext-port:
+  ext-port:
     type: string
     default: "eth2.724"
     description: |
