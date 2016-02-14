@@ -21,7 +21,7 @@ from charmhelpers.core.host import (
 from subprocess import check_call
 
 hooks = Hooks()
-config = config()
+#config = config()
 
 @hooks.hook("config-changed")
 def config_changed():
