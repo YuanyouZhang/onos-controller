@@ -26,10 +26,10 @@ hooks = Hooks()
 @hooks.hook("config-changed")
 def config_changed():
     gatewaymac=config("gateway-mac")
-    print 'gatewaymac value is ' + gatewaymac
-    if gatewaymac != "default" :
-        print 'gatewaymac actually value is ' + gatewaymac
-        check_call("/opt/onos/bin/onos \'externalgateway-update -m " + gatewaymac + "\'",shell=True) 
+    if (gatewaymac is not None) and len(gatewaymac) > 4 :
+        if gatewaymac != "default" :
+            print 'gatewaymac actually value is ' + gatewaymac
+            check_call("/opt/onos/bin/onos \'externalgateway-update -m " + gatewaymac + "\'",shell=True) 
 
 @hooks.hook("controller-api-relation-joined")
 def controller_api_joined():
