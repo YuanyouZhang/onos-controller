@@ -1,16 +1,30 @@
 options:
- # string-option:
- #   type: string
- #   default: "Default Value"
- #   description: "A short description of the configuration option"
- # boolean-option:
- #   type: boolean
- #   default: False
- #   description: "A short description of the configuration option"
- # int-option:
- #   type: int
- #   default: 9001
- #   description: "A short description of the configuration option"
+  profile:
+    type: string
+    default: openvswitch-onos-goldeneye
+    description: |
+      SDN controller profile to configure ONOS for; supported values include
+
+        openvswitch-onos: Open vSwitch ONOS for OpenStack - Emu release
+        openvswitch-onos-goldeneye: Open vSwitch ONOS for OpenStack - Goldeneye release
+
+      Only a single profile is supported at any one time.
+  install-url:
+    type: string
+    default: "http://downloads.onosproject.org/nightly/onos-1.6.0.latest-NIGHTLY.tar.gz"
+    description: |
+      Web addressable location of ONOS binaries to install
+
+  install-sources:
+    type: string
+    default: ''
+    description: |
+      Package sources to install. Can be used to specify where to install the
+      onos-karaf package from.
+  install-keys:
+    type: string
+    default: ''
+    description: Apt keys for package install sources
   ext-port:
     type: string
     default: "eth2.724"
