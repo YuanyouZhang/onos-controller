@@ -3,19 +3,20 @@ set -eux
 DIR="$(dirname `readlink -f $0`)"
 TARGET="/opt"
 onos_home="/opt/onos"
-onos=http://205.177.226.237:9999/onosfw/onos-1.3.0.tar.gz
+#onos=http://205.177.226.237:9999/onosfw/onos-1.3.0.tar.gz
+onos="$1"
 jdk=http://205.177.226.237:9999/onosfw/jdk-8u51-linux-x64.tar.gz
 repo=http://205.177.226.237:9999/onosfw/repository.tar
-karaf_dist="apache-karaf-3.0.3"
-onos_pkg_name="onos-1.3.0.tar.gz"
-jdk8_pkg_name="jdk-8u51-linux-x64.tar.gz"
+karaf_dist="apache-karaf-3.0.5"
+onos_pkg_name="onos-1.6.0.tar.gz"
+#jdk8_pkg_name="jdk-8u51-linux-x64.tar.gz"
 onos_boot_features="config,standard,region,package,kar,ssh,management,webconsole,onos-api,onos-core,onos-incubator,onos-cli,onos-rest,onos-gui,onos-openflow-base,onos-openflow"
 HOME="/root"
 
 cd $TARGET
 if [ ! -f "onos_pack.tar" ]
 then
-  wget  $onos -P $TARGET
+  sudo wget  $onos -P $TARGET -O $onos_pkg_name
   wget  $jdk -P $TARGET
   wget  $repo -P $TARGET
 else
@@ -37,7 +38,7 @@ echo 'export ONOS_OPTS=debug' > /opt/onos/options;
 echo 'export ONOS_USER=root' >> /opt/onos/options;
 mkdir /opt/onos/var;
 mkdir /opt/onos/config;
-sed -i "/^featuresBoot=/c\featuresBoot=$onos_boot_features" /opt/onos/apache-karaf-3.0.3/etc/org.apache.karaf.features.cfg
+sed -i "/^featuresBoot=/c\featuresBoot=$onos_boot_features" /opt/onos/apache-karaf-3.0.5/etc/org.apache.karaf.features.cfg
 
 #jdk config
 
@@ -66,12 +67,4 @@ EOT
 chmod +x /etc/profile.d/jdk*
 
 
-
-service onos start 
-sleep 100
-service onos restart
-sleep 60
-service onos restart
-sleep 60
-service onos stop
 
