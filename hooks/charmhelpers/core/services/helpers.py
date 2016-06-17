@@ -16,7 +16,9 @@
 
 import os
 import yaml
+
 from charmhelpers.core import hookenv
+from charmhelpers.core import host
 from charmhelpers.core import templating
 
 from charmhelpers.core.services.base import ManagerCallback
@@ -45,12 +47,14 @@ class RelationContext(dict):
     """
     name = None
     interface = None
-    required_keys = []
 
     def __init__(self, name=None, additional_required_keys=None):
+        if not hasattr(self, 'required_keys'):
+            self.required_keys = []
+
         if name is not None:
             self.name = name
-        if additional_required_keys is not None:
+        if additional_required_keys:
             self.required_keys.extend(additional_required_keys)
         self.get_data()
 
@@ -134,7 +138,10 @@ class MysqlRelation(RelationContext):
     """
     name = 'db'
     interface = 'mysql'
-    required_keys = ['host', 'user', 'password', 'database']
+
+    def __init__(self, *args, **kwargs):
+        self.required_keys = ['host', 'user', 'password', 'database']
+        RelationContext.__init__(self, *args, **kwargs)
 
 
 class HttpRelation(RelationContext):
@@ -146,7 +153,10 @@ class HttpRelation(RelationContext):
     """
     name = 'website'
     interface = 'http'
-    required_keys = ['host', 'port']
+
+    def __init__(self, *args, **kwargs):
+        self.required_keys = ['host', 'port']
+        RelationContext.__init__(self, *args, **kwargs)
 
     def provide_data(self):
         return {
@@ -231,28 +241,51 @@ class TemplateCallback(ManagerCallback):
     action.
 
     :param str source: The template source file, relative to
-    `$CHARM_DIR/templates`
+        `$CHARM_DIR/templates`
 
-    :param str target: The target to write the rendered template to
+    :param str target: The target to write the rendered template to (or None)
     :param str owner: The owner of the rendered file
     :param str group: The group of the rendered file
     :param int perms: The permissions of the rendered file
+    :param partial on_change_action: functools partial to be executed when
+                                     rendered file changes
+    :param jinja2 loader template_loader: A jinja2 template loader
+
+    :return str: The rendered template
     """
     def __init__(self, source, target,
-                 owner='root', group='root', perms=0o444):
+                 owner='root', group='root', perms=0o444,
+                 on_change_action=None, template_loader=None):
         self.source = source
         self.target = target
         self.owner = owner
         self.group = group
         self.perms = perms
+        self.on_change_action = on_change_action
+        self.template_loader = template_loader
 
     def __call__(self, manager, service_name, event_name):
+        pre_checksum = ''
+        if self.on_change_action and os.path.isfile(self.target):
+            pre_checksum = host.file_hash(self.target)
         service = manager.get_service(service_name)
-        context = {}
+        context = {'ctx': {}}
         for ctx in service.get('required_data', []):
             context.update(ctx)
-        templating.render(self.source, self.target, context,
-                          self.owner, self.group, self.perms)
+            context['ctx'].update(ctx)
+
+        result = templating.render(self.source, self.target, context,
+                                   self.owner, self.group, self.perms,
+                                   template_loader=self.template_loader)
+        if self.on_change_action:
+            if pre_checksum == host.file_hash(self.target):
+                hookenv.log(
+                    'No change detected: {}'.format(self.target),
+                    hookenv.DEBUG)
+            else:
+                self.on_change_action()
+
+        return result
 
 
 # Convenience aliases for templates

@@ -1,9 +1,5 @@
 import subprocess
-from os import environ
-import urlparse
 
-from charmhelpers.core.templating import render
-from charmhelpers.core.hookenv import config
 from charmhelpers.core.decorators import retry_on_exception
 
 
