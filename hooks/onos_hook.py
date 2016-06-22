@@ -37,11 +37,12 @@ def controller_api_joined():
     relation_set(port=8181, username="admin", password="admin")
 
 
-@hooks.hook("install")
+@hooks.hook("install.real")
 def install():
     # install jdk and onos.
     shutil.copy("files/onos_install.sh", "/opt")
-    shutil.copy("files/onos.conf", "/etc/init")
+    #shutil.copy("files/onos.conf", "/etc/init")
+    shutil.copy("files/onos", "/etc/init.d")
     if config("install-url"):
         url = config("install-url")
         check_call("sh /opt/onos_install.sh "+url, shell=True)
@@ -49,7 +50,8 @@ def install():
 
 @hooks.hook("start")
 def start():
-    service_start("onos")
+    #service_start("onos")
+    check_call("sudo sh /etc/init.d/onos start", shell=True)
     check_call("sleep 60", shell=True)
     if config("profile"):
         process_onos_cmds(PROFILES[config("profile")])
@@ -65,7 +67,8 @@ def ovsdb_manager_joined():
 
 @hooks.hook("stop")
 def stop():
-    service_stop("onos")
+    #service_stop("onos")
+    check_call("sudo sh /etc/init.d/onos stop", shell=True)
 
 
 def main():

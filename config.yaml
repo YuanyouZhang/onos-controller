@@ -11,7 +11,7 @@ options:
       Only a single profile is supported at any one time.
   install-url:
     type: string
-    default: "http://downloads.onosproject.org/nightly/onos-1.6.0.latest-NIGHTLY.tar.gz"
+    default: "https://downloads.onosproject.org/nightly/onos-1.6.0-rc4.tar.gz"
     description: |
       Web addressable location of ONOS binaries to install
 
